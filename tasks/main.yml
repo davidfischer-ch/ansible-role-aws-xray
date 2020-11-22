@@ -1,0 +1,8 @@
+# Install and configure AWS X-Ray Daemon
+# https://eu-west-1.console.aws.amazon.com/xray/home?region=eu-west-1#/getting-started
+---
+
+- block:
+    - import_tasks: facts.yml
+    - import_tasks: '{{ aws_xray_role_action }}.yml'
+  tags: aws-xray

@@ -1,0 +1,8 @@
+---
+
+- assert:
+    that:
+      - aws_xray_daemon_mode in aws_xray_daemon_modes
+      - aws_xray_role_action in aws_xray_role_actions
+      - aws_xray_version is defined
+  tags: [aws-xray, always]

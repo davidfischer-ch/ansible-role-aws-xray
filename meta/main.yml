@@ -1,0 +1,23 @@
+---
+
+dependencies:
+  - role: daemon
+    daemon_user: '{{ aws_xray_daemon_user }}'
+    daemon_group: '{{ aws_xray_daemon_group }}'
+    daemon_user_id: '{{ aws_xray_daemon_user_id }}'
+    daemon_group_id: '{{ aws_xray_daemon_group_id }}'
+    tags: [aws-xray, dependencies]
+    when: aws_xray_role_action == 'setup'
+
+  - role: local-source
+    tags: [aws-xray, dependencies]
+    when: aws_xray_role_action == 'setup'
+
+  - role: supervisor
+    tags: [aws-xray, dependencies]
+    when: aws_xray_role_action == 'setup' and aws_xray_daemon_mode == 'supervisor'
+
+  - role: ufw
+    ufw_rules: '{{ aws_xray_ufw_rules }}'
+    tags: [aws-xray, dependencies]
+    when: aws_xray_role_action == 'setup' and aws_xray_ufw_rules|length > 0

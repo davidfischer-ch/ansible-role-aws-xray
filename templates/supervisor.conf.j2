@@ -1,0 +1,11 @@
+[program:xray]
+command={{ aws_xray_daemon_path }} -c /etc/xray.yml
+directory=/tmp
+numprocs=1
+user={{ aws_xray_daemon_user }}
+group={{ aws_xray_daemon_group }}
+stdout_logfile=/var/log/supervisor/xray-stdout.log
+stderr_logfile=/var/log/supervisor/xray-stderr.log
+autostart=true
+autorestart=true
+startsecs=5

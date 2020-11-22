@@ -1,0 +1,23 @@
+---
+
+Version: 2  # Configuration file format version
+TotalBufferSizeMB: {{ aws_xray_total_buffer_size_mb|int }}
+Concurrency: {{ aws_xray_concurrency|int }}
+Region: {{ aws_xray_region }}
+Endpoint: {{ aws_xray_endpoint }}
+Socket:
+  # Change the address and port on which the daemon listens for UDP packets containing segment documents
+  UDPAddress: {{ aws_xray_listen_address }}:{{ aws_xray_port|int }}
+  # Change the address and port on which the daemon listens for HTTP requests to proxy to AWS X-Ray
+  TCPAddress: {{ aws_xray_listen_address }}:{{ aws_xray_port|int }}
+Logging:
+  LogRotation: {{ aws_xray_log_rotation|bool }}
+  LogLevel: {{ aws_xray_log_level }}
+  LogPath: {{ aws_xray_log_path }}
+LocalMode: {{ aws_xray_local_mode|bool }}
+ResourceARN: {{ aws_xray_resource_arn }}
+RoleARN: {{ aws_xray_role_arn }}
+NoVerifySSL: {{ aws_xray_no_verify_ssl|bool }}
+ProxyAddress: {{ aws_xray_proxy_address }}
+
+...

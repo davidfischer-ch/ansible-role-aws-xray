@@ -1,0 +1,42 @@
+do_become: yes
+
+aws_xray_release_url: https://s3.dualstack.eu-west-1.amazonaws.com/aws-xray-assets.eu-west-1/xray-daemon/aws-xray-daemon-linux-{{ aws_xray_version }}.zip
+
+# aws_xray_version: 3.x
+# aws_xray_release_checksum:
+
+# Daemon
+aws_xray_daemon_group: '{{ aws_xray_daemon_user }}'
+aws_xray_daemon_group_id: '{{ omit }}'
+aws_xray_daemon_path: /usr/local/bin/xray
+aws_xray_daemon_user: xray
+aws_xray_daemon_user_id: '{{ omit }}'
+
+# Networking
+aws_xray_interface: lo
+aws_xray_listen_address: 127.0.0.1
+aws_xray_port:  2000
+
+aws_xray_ufw_rules:
+  - direction: in
+    interface: '{{ aws_xray_interface or omit }}'
+    port: '{{ aws_xray_port }}'
+    proto: udp
+    rule: allow
+
+aws_xray_only_on_ec2: yes
+
+aws_xray_config_file: xray.yml.j2
+
+aws_xray_concurrency: 8           # Maximum number of concurrent calls to AWS X-Ray to upload segment documents
+aws_xray_endpoint: ''             # Change the X-Ray service endpoint to which the daemon sends segment documents
+aws_xray_local_mode: no           # Turn on local mode to skip EC2 instance metadata check
+aws_xray_log_level: prod          # One of aws_xray_log_levels
+aws_xray_log_path: ''             # Output logs to the specified file path
+aws_xray_log_rotation: yes
+aws_xray_region: ''               # Send segments to AWS X-Ray service in a specific region
+aws_xray_total_buffer_size_mb: 0  # Maximum buffer size in MB (minimum 3). Choose 0 to use 1% of host memory
+aws_xray_resource_arn: ''         # Amazon Resource Name (ARN) of the AWS resource running the daemon
+aws_xray_role_arn: ''             # Assume an IAM role to upload segments to a different account
+aws_xray_no_verify_ssl: no        # Disable TLS certificate verification
+aws_xray_proxy_address: ''        # Upload segments to AWS X-Ray through a proxy

@@ -1,0 +1,13 @@
+---
+
+- name: supervisor restart xray
+  supervisorctl:
+    name: xray
+    state: restarted
+  become: '{{ do_become }}'
+
+- name: supervisor reload xray
+  supervisorctl:
+    name: xray
+    state: restarted
+  become: '{{ do_become }}'

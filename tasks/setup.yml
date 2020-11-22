@@ -1,0 +1,55 @@
+---
+
+- block:
+    - block:
+        - name: Download AWS X-Ray release
+          get_url:
+            url: '{{ aws_xray_release_url }}'
+            checksum: '{{ aws_xray_release_checksum }}'
+            dest: '{{ local_source_directory }}/aws-xray-daemon-linux-{{ aws_xray_version }}.zip'
+            force: no
+
+        - name: Extract AWS X-Ray release
+          unarchive:
+            src: '{{ local_source_directory }}/aws-xray-daemon-linux-{{ aws_xray_version }}.zip'
+            dest: '{{ local_source_directory }}'
+            copy: no
+
+        - name: Install AWS X-Ray
+          copy:
+            src: '{{ local_source_directory }}/xray'
+            dest: '{{ aws_xray_daemon_path }}'
+            mode: 0755
+            remote_src: yes
+      tags: packages
+
+    - block:
+        - name: Configure AWS X-Ray
+          template:
+            src: '{{ aws_xray_config_file }}'
+            dest: /etc/xray.yml
+            mode: 0644
+          notify: '{{ aws_xray_daemon_modes[aws_xray_daemon_mode] }} reload xray'
+
+        - include_tasks: setup-service-{{ aws_xray_daemon_mode }}.yml
+      tags: config
+
+    - block:
+        - name: Start AWS-Xray service
+          supervisorctl:
+            name: xray
+            state: started
+          ignore_errors: yes
+          register: _aws_xray_start
+
+        - name: Restart AWS-Xray service
+          supervisorctl:
+            name: xray
+            state: restarted
+          when: _aws_xray_start is failure
+      become: '{{ do_become }}'
+      tags: services
+      when: aws_xray_daemon_mode == 'supervisor'
+
+  become: '{{ do_become }}'
+  when: ec2_dns_name is defined or ansible_ec2_hostname is defined or not aws_xray_only_on_ec2|bool

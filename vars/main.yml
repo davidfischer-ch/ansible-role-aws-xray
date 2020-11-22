@@ -1,0 +1,16 @@
+aws_xray_daemon_modes:
+  supervisor: supervisor
+
+aws_xray_log_levels:
+  - dev
+  - debug
+  - info
+  - warn
+  - error
+  - prod
+
+aws_xray_role_actions:
+  - setup
+
+# Private
+_aws_xray_start: {}

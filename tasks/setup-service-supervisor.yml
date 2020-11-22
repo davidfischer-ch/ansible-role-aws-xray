@@ -1,0 +1,16 @@
+---
+
+- block:
+    - name: Configure AWS X-Ray service
+      template:
+        src: supervisor.conf.j2
+        dest: /etc/supervisor/conf.d/xray.conf
+        mode: 0644
+      notify: '{{ aws_xray_daemon_modes[aws_xray_daemon_mode] }} restart xray'
+
+    - name: Install AWS X-Ray service
+      supervisorctl:
+        name: xray
+        state: present
+  become: '{{ do_become }}'
+  tags: [aws-xray, config]  # FIXME Remove when this is fixed https://github.com/ansible/ansible/issues/30882
