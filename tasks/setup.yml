@@ -19,7 +19,7 @@
           copy:
             src: '{{ local_source_directory }}/xray'
             dest: '{{ aws_xray_daemon_path }}'
-            mode: 0755
+            mode: '755'
             remote_src: yes
       tags: packages
 
@@ -28,7 +28,7 @@
           template:
             src: '{{ aws_xray_config_file }}'
             dest: /etc/xray.yml
-            mode: 0644
+            mode: '644'
           notify: '{{ aws_xray_daemon_modes[aws_xray_daemon_mode] }} reload xray'
 
         - include_tasks: setup-service-{{ aws_xray_daemon_mode }}.yml
